@@ -1,3 +1,36 @@
+This AI SaaS platform includes five powerful AI tools:
+
+1. **Conversation** - Chat with an advanced AI assistant
+2. **Code Generation** - Generate code snippets and solutions
+3. **Image Generation** - Create images from text descriptions
+4. **Music Generation** - Compose original music from prompts
+5. **Video Generation** - Create videos from text prompts
+
+
+## Key Features
+
+- **Modern UI with shadcn/ui and Tailwind CSS** - Beautiful, responsive interface
+- **Next.js 15 App Router** - Latest Next.js features and optimizations
+- **TypeScript** - Type-safe code for better development experience
+- **Authentication with Clerk** - Secure user authentication
+- **Sidebar Navigation** - Easy access to all tools
+- **API Limit Counter** - Track free tier usage
+- **Pro Subscription** - Stripe integration for premium features
+- **Error Handling** - Robust error management
+- **Customer Support** - Crisp integration for user assistance
+
+
+## Technology Stack
+
+- **Frontend**: Next.js 15, React, TypeScript, Tailwind CSS, shadcn/ui
+- **Backend**: Next.js API routes, Prisma ORM
+- **Database**: PostgreSQL
+- **Authentication**: Clerk
+- **AI Providers**: OpenAI (conversation, code) and Replicate (image, music, video)
+- **Payments**: Stripe
+- **Customer Support**: Crisp
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

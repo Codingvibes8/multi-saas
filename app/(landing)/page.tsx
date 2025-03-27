@@ -8,7 +8,7 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen w-full">
       <header className="px-4 lg:px-6 h-14 flex items-center justify-between shadow-lg">
-        <Link href="/" className="flex items-center justify-center">
+        <Link href="/public" className="flex items-center justify-center">
           <span className="text-amber-600 font-bold text-2xl">AI Studio</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
