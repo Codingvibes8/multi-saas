@@ -1,5 +1,5 @@
-import type React from "react"
-//import { ClerkProvider } from "@clerk/nextjs"
+import React from "react"
+import { ClerkProvider } from "@clerk/nextjs"
 import { Inter } from "next/font/google"
 import type { Metadata } from "next"
 
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    
+    <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
@@ -34,5 +34,6 @@ export default function RootLayout({
           </ThemeProvider>
         </body>
       </html>
+    </ClerkProvider>
    )
 }
