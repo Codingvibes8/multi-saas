@@ -1,50 +1,131 @@
 import React from 'react';
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Sparkles, Zap, Stars } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { ParticleField } from "@/components/particles"
+import { TypewriterText, GlowingOrb } from "@/components/animated-text"
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen w-full">
-      <header className="px-4 lg:px-6 h-14 flex items-center justify-between shadow-lg">
-        <Link href="/public" className="flex items-center justify-center">
-          <span className="text-amber-600 font-bold text-2xl">AI Studio</span>
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 lg:px-6 h-16 flex items-center justify-between backdrop-blur-md bg-background/80 border-b border-border/50">
+        <Link href="/public" className="flex items-center justify-center gap-2">
+          <div className="relative">
+            <Sparkles className="h-8 w-8 text-amber-500 animate-pulse" />
+            <div className="absolute inset-0 h-8 w-8 bg-amber-500/20 blur-xl" />
+          </div>
+          <span className="text-gradient font-bold text-2xl">AI Studio</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
-          <Link href="/sign-in" className="text-sm dark:bg-amber-600 p-1 rounded font-medium hover:scale-105 transition-transform  underline-offset-4">
+          <Link
+            href="/sign-in"
+            className="text-sm font-medium px-4 py-2 rounded-full hover:bg-amber-500/10 transition-all duration-300 hover:text-amber-500"
+          >
             Sign In
           </Link>
-          <Link href="/sign-up" className="text-sm font-medium hover:scale-105 transition-transform  underline-offset-4">
+          <Link
+            href="/sign-up"
+            className="text-sm font-medium px-4 py-2 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/25"
+          >
             Sign Up
           </Link>
           <ThemeToggle />
         </nav>
       </header>
-      <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                  The Ultimate AI Toolkit
+
+      <main className="flex-1 pt-16">
+        {/* Hero Section */}
+        <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden hero-gradient">
+          {/* Particle Animation Background */}
+          <ParticleField />
+
+          {/* Glowing Orbs */}
+          <GlowingOrb className="top-20 right-20" size="lg" color="amber" />
+          <GlowingOrb className="bottom-40 left-10" size="md" color="purple" />
+          <GlowingOrb className="top-1/2 right-1/3" size="sm" color="blue" />
+
+          {/* Grid Pattern Overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(251,191,36,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(251,191,36,0.03)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" />
+
+          <div className="container relative z-10 px-4 md:px-6">
+            <div className="flex flex-col items-center space-y-8 text-center">
+              {/* Badge */}
+              <div className="animate-fade-in-up">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-500/30 bg-amber-500/10 backdrop-blur-sm">
+                  <Zap className="h-4 w-4 text-amber-500" />
+                  <span className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                    Powered by Advanced AI
+                  </span>
+                  <Stars className="h-4 w-4 text-amber-500" />
+                </div>
+              </div>
+
+              {/* Main Heading */}
+              <div className="space-y-4 animate-fade-in-up animation-delay-200">
+                <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+                  <span className="block">The Ultimate</span>
+                  <span className="block text-gradient">AI Toolkit</span>
                 </h1>
-                <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                  Create conversations, generate code, design images, compose music, and produce videos with our
-                  state-of-the-art AI tools.
+              </div>
+
+              {/* Typewriter Subtitle */}
+              <div className="animate-fade-in-up animation-delay-400 max-w-[800px]">
+                <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground">
+                  Create stunning{" "}
+                  <TypewriterText
+                    words={["conversations", "code snippets", "images", "music", "videos"]}
+                    className="text-amber-500 font-semibold"
+                  />{" "}
+                  with our state-of-the-art AI tools.
                 </p>
               </div>
-              <div className="space-x-4">
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-600">
                 <Link href="/sign-up">
-                  <Button className="px-8 dark:bg-amber-600 rounded hover:scale-105 transition-transform">
-                    Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button
+                    size="lg"
+                    className="group relative px-8 py-6 text-lg font-semibold bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-full transition-all duration-300 hover:scale-105 animate-glow"
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      Get Started Free
+                      <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </span>
                   </Button>
                 </Link>
                 <Link href="#features">
-                  <Button variant="outline" className="px-8">
-                    Learn More
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="px-8 py-6 text-lg font-semibold rounded-full border-2 border-amber-500/50 hover:border-amber-500 hover:bg-amber-500/10 transition-all duration-300 hover:scale-105"
+                  >
+                    Explore Features
                   </Button>
                 </Link>
+              </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-8 pt-12 animate-fade-in-up animation-delay-800">
+                <div className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold text-gradient">50K+</div>
+                  <div className="text-sm text-muted-foreground">Active Users</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold text-gradient">1M+</div>
+                  <div className="text-sm text-muted-foreground">Generations</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold text-gradient">99.9%</div>
+                  <div className="text-sm text-muted-foreground">Uptime</div>
+                </div>
+              </div>
+
+              {/* Scroll Indicator */}
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+                <div className="w-6 h-10 rounded-full border-2 border-amber-500/50 flex items-start justify-center p-2">
+                  <div className="w-1.5 h-3 rounded-full bg-amber-500 animate-pulse" />
+                </div>
               </div>
             </div>
           </div>
