@@ -2,7 +2,7 @@ import type React from "react"
 import { Sidebar } from "@/components/sidebar"
 import { checkSubscription } from "@/lib/subscription"
 import { getApiLimitCount } from "@/lib/api-limit"
-import { auth } from "@clerk/nextjs/server"
+import { getServerUser } from "@/lib/supabaseServer"
 import { redirect } from "next/navigation"
 
 export default async function DashboardLayout({
@@ -10,9 +10,9 @@ export default async function DashboardLayout({
                                               }: {
     children: React.ReactNode
 }) {
-    const { userId } = auth()
+    const user = await getServerUser()
 
-    if (!userId) {
+    if (!user?.id) {
         redirect("/sign-in")
     }
 

@@ -1,5 +1,5 @@
 import React from "react"
-import { ClerkProvider } from "@clerk/nextjs"
+import SupabaseProvider from "@/app/supabase-provider"
 import { Inter } from "next/font/google"
 import type { Metadata } from "next"
 
@@ -23,17 +23,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <SupabaseProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             {/* <CrispProvider /> */}
             <ModalProvider />
             {children}
             <Toaster />
           </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
-   )
+        </SupabaseProvider>
+      </body>
+    </html>
+  )
 }

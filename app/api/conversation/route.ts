@@ -1,18 +1,18 @@
 import { openai } from "@ai-sdk/openai"
 import { streamText } from "ai"
-import { auth } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 
 import { checkApiLimit, incrementApiLimit } from "@/lib/api-limit"
 import { checkSubscription } from "@/lib/subscription"
+import { getServerUser } from "@/lib/supabaseServer"
 
 export async function POST(req: Request) {
   try {
-    const { userId } = auth()
+    const user = await getServerUser()
     const body = await req.json()
     const { messages } = body
 
-    if (!userId) {
+    if (!user?.id) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 

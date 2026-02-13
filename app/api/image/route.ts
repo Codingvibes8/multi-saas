@@ -1,21 +1,18 @@
-import { auth } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 import { Replicate } from "replicate"
 
 import { checkApiLimit, incrementApiLimit } from "@/lib/api-limit"
 import { checkSubscription } from "@/lib/subscription"
-
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN!,
-})
+import { getServerUser } from "@/lib/supabaseServer"
 
 export async function POST(req: Request) {
   try {
-    const { userId } = auth()
+    const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN! })
+    const user = await getServerUser()
     const body = await req.json()
     const { prompt, amount = 1, resolution = "512x512" } = body
 
-    if (!userId) {
+    if (!user?.id) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 

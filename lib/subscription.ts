@@ -1,33 +1,24 @@
-import { auth } from "@clerk/nextjs/server"
-import prismadb from "@/lib/prismadb"
+import { getServerUser } from "@/lib/supabaseServer"
+import supabaseAdmin from "@/lib/supabaseAdmin"
 
 const DAY_IN_MS = 86_400_000
 
 export const checkSubscription = async () => {
-    const { userId } = auth()
+    const user = await getServerUser()
 
-    if (!userId) {
-        return false
-    }
+    if (!user?.id) return false
 
-    const userSubscription = await prismadb.userSubscription.findUnique({
-        where: {
-            userId,
-        },
-        select: {
-            stripeSubscriptionId: true,
-            stripeCurrentPeriodEnd: true,
-            stripeCustomerId: true,
-            stripePriceId: true,
-        },
-    })
+    const { data: userSubscription, error } = await supabaseAdmin
+        .from("user_subscriptions")
+        .select("stripe_subscription_id, stripe_current_period_end, stripe_price_id")
+        .eq("user_id", user.id)
+        .maybeSingle()
 
-    if (!userSubscription) {
-        return false
-    }
+    if (error) return false
+    if (!userSubscription) return false
 
     const isValid =
-        userSubscription.stripePriceId && userSubscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS > Date.now()
+        userSubscription.stripe_price_id && new Date(userSubscription.stripe_current_period_end).getTime() + DAY_IN_MS > Date.now()
 
     return !!isValid
 }

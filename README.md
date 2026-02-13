@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Studio
+
+An all-in-one AI SaaS platform built with Next.js 15 that provides conversation, code generation, image generation, music generation, and video generation tools — all behind a freemium subscription model.
+
+## Features
+
+- **Conversation** — Chat with an AI assistant powered by OpenAI
+- **Code Generation** — Generate code snippets with AI
+- **Image Generation** — Create images using Replicate models
+- **Music Generation** — Generate music tracks with AI
+- **Video Generation** — Create videos with AI
+- **Authentication** — User auth via Supabase (sign-in, sign-up, protected routes)
+- **Free Tier** — 5 free API calls, then upgrade to Pro
+- **Pro Subscription** — Unlimited usage via Stripe billing
+- **Dark Mode** — System/light/dark theme support
+- **Responsive UI** — Mobile-friendly sidebar and dashboard
+
+## Tech Stack
+
+- **Framework:** Next.js 15 (App Router, Turbopack)
+- **Language:** TypeScript
+- **Auth:** Supabase
+- **Database:** Supabase (PostgreSQL)
+- **AI:** OpenAI (conversation & code), Replicate (image, music, video)
+- **Payments:** Stripe (subscriptions & webhooks)
+- **UI:** Tailwind CSS, shadcn/ui, Radix UI, Lucide icons
+- **State:** Zustand
+- **Live Chat:** Crisp (optional)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- PostgreSQL database
+- API keys for Clerk, OpenAI, Replicate, and Stripe
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repo-url>
+cd multi-saas
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Set up environment variables
+
+Copy the example env file and fill in your keys:
+
+```bash
+cp .env.example .env
+```
+
+See `.env.example` for all required variables.
+
+### 4. Set up the database
+
+Configure your Supabase project and create the required tables (e.g. `user_subscriptions`, `user_api_limits`). You can use the SQL editor in the Supabase dashboard or run SQL migrations.
+
+### 5. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+app/
+  (dashboard)/          # Authenticated dashboard routes
+    code/               # Code generation page
+    conversation/       # Conversation page
+    dashboard/          # Dashboard home
+    image/              # Image generation page
+    music/              # Music generation page
+    settings/           # User settings
+    video/              # Video generation page
+  api/                  # API routes
+    code/               # Code generation endpoint
+    conversation/       # Conversation endpoint
+    image/              # Image generation endpoint
+    music/              # Music generation endpoint
+    video/              # Video generation endpoint
+    stripe/             # Stripe checkout
+    webhook/            # Stripe webhook handler
+components/             # Reusable UI components
+lib/                    # Utilities (Prisma client, Stripe, API limits, subscriptions)
+prisma/                 # Prisma schema
+```
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Command         | Description                  |
+| --------------- | ---------------------------- |
+| `npm run dev`   | Start dev server (Turbopack) |
+| `npm run build` | Production build             |
+| `npm run start` | Start production server      |
+| `npm run lint`  | Run ESLint                   |

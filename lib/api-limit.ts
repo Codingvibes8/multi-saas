@@ -1,62 +1,58 @@
-import { auth } from "@clerk/nextjs/server"
-import prismadb from "@/lib/prismadb"
+import { getServerUser } from "@/lib/supabaseServer"
+import supabaseAdmin from "@/lib/supabaseAdmin"
 import { MAX_FREE_COUNTS } from "@/constants"
 
 export const incrementApiLimit = async () => {
-    const { userId } = auth()
+    const user = await getServerUser()
 
-    if (!userId) {
-        return
-    }
+    if (!user?.id) return
 
-    const userApiLimit = await prismadb.userApiLimit.findUnique({
-        where: { userId },
-    })
+    const { data: existing, error } = await supabaseAdmin
+        .from("user_api_limits")
+        .select("count")
+        .eq("user_id", user.id)
+        .maybeSingle()
 
-    if (userApiLimit) {
-        await prismadb.userApiLimit.update({
-            where: { userId },
-            data: { count: userApiLimit.count + 1 },
-        })
+    if (error) return
+
+    if (existing) {
+        await supabaseAdmin
+            .from("user_api_limits")
+            .update({ count: existing.count + 1 })
+            .eq("user_id", user.id)
     } else {
-        await prismadb.userApiLimit.create({
-            data: { userId, count: 1 },
-        })
+        await supabaseAdmin.from("user_api_limits").insert({ user_id: user.id, count: 1 })
     }
 }
 
 export const checkApiLimit = async () => {
-    const { userId } = auth()
+    const user = await getServerUser()
 
-    if (!userId) {
-        return false
-    }
+    if (!user?.id) return false
 
-    const userApiLimit = await prismadb.userApiLimit.findUnique({
-        where: { userId },
-    })
+    const { data: userApiLimit } = await supabaseAdmin
+        .from("user_api_limits")
+        .select("count")
+        .eq("user_id", user.id)
+        .maybeSingle()
 
-    if (!userApiLimit || userApiLimit.count < MAX_FREE_COUNTS) {
-        return true
-    }
+    if (!userApiLimit || userApiLimit.count < MAX_FREE_COUNTS) return true
 
     return false
 }
 
 export const getApiLimitCount = async () => {
-    const { userId } = auth()
+    const user = await getServerUser()
 
-    if (!userId) {
-        return 0
-    }
+    if (!user?.id) return 0
 
-    const userApiLimit = await prismadb.userApiLimit.findUnique({
-        where: { userId },
-    })
+    const { data: userApiLimit } = await supabaseAdmin
+        .from("user_api_limits")
+        .select("count")
+        .eq("user_id", user.id)
+        .maybeSingle()
 
-    if (!userApiLimit) {
-        return 0
-    }
+    if (!userApiLimit) return 0
 
     return userApiLimit.count
 }

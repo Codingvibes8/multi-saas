@@ -1,30 +1,29 @@
-import { auth, currentUser } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 
-import prismadb from "@/lib/prismadb"
 import { stripe } from "@/lib/stripe"
 import { absoluteUrl } from "@/lib/utils"
+import { getServerUser } from "@/lib/supabaseServer"
+import supabaseAdmin from "@/lib/supabaseAdmin"
 
 const settingsUrl = absoluteUrl("/settings")
 
 export async function GET() {
   try {
-    const { userId } = auth()
-    const user = await currentUser()
+    const user = await getServerUser()
 
-    if (!userId || !user) {
+    if (!user?.id || !user?.email) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
-    const userSubscription = await prismadb.userSubscription.findUnique({
-      where: {
-        userId,
-      },
-    })
+    const { data: userSubscription } = await supabaseAdmin
+      .from("user_subscriptions")
+      .select("stripe_customer_id, stripe_subscription_id")
+      .eq("user_id", user.id)
+      .maybeSingle()
 
-    if (userSubscription && userSubscription.stripeCustomerId) {
+    if (userSubscription && userSubscription.stripe_customer_id) {
       const stripeSession = await stripe.billingPortal.sessions.create({
-        customer: userSubscription.stripeCustomerId,
+        customer: userSubscription.stripe_customer_id,
         return_url: settingsUrl,
       })
 
@@ -37,7 +36,7 @@ export async function GET() {
       payment_method_types: ["card"],
       mode: "subscription",
       billing_address_collection: "auto",
-      customer_email: user.emailAddresses[0].emailAddress,
+      customer_email: user.email,
       line_items: [
         {
           price_data: {
@@ -55,7 +54,7 @@ export async function GET() {
         },
       ],
       metadata: {
-        userId,
+        userId: user.id,
       },
     })
 

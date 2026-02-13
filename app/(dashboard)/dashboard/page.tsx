@@ -1,7 +1,6 @@
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { MessageSquare, Code, ImageIcon, Music, VideoIcon, ArrowRight } from "lucide-react"
-import { auth } from "@clerk/nextjs/server"
 import Link from "next/link"
 
 const tools = [
@@ -42,8 +41,12 @@ const tools = [
     },
 ]
 
-export default function DashboardPage() {
-    const { userId } = auth()
+export default async function DashboardPage() {
+    const user = await (await import("@/lib/supabaseServer")).getServerUser()
+
+    if (!user?.id) {
+        return null
+    }
 
     return (
         <div>
